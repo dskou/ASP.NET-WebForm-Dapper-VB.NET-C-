@@ -45,7 +45,7 @@ namespace ASP.NET_WebForm_Dapper_VB.NET_C_.Controllers
                 return View("~/Views/Home/Index.cshtml", list);
             }
 
-            // 初期表示に戻る（再GetAll）
+            // 初期表示に戻る、エラーメッセージ画面上表示
             TempData["Message"] = "Record updated successfully.";
             return RedirectToAction("Index");
         }
