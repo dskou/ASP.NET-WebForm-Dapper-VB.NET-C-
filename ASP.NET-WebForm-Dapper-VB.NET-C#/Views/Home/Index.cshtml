@@ -1,9 +1,11 @@
 ﻿@using System.Linq
 @model IEnumerable<ASP.NET_WebForm_Dapper_VB.NET_C_.Models.Customer>
 @{
-    Layout = null;
+    Layout = null; // レイアウトページを使わない
     var data = Model ?? Enumerable.Empty<ASP.NET_WebForm_Dapper_VB.NET_C_.Models.Customer>();
+    // data 変数を定義。Model が null の場合は空のコレクションを代入して、NullReferenceException を回避する//
     int? editId = ViewBag.EditId as int?;
+    // ViewBag から EditId を取り出して、int?（nullable int）にキャスト
 }
 <!DOCTYPE html>
 <html>

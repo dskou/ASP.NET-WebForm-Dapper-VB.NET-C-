@@ -39,13 +39,13 @@ namespace ASP.NET_WebForm_Dapper_VB.NET_C_.Controllers
 
             if (!_repo.UpdateCustomer(customer))
             {
-                ModelState.AddModelError("", "更新失败，请稍后再试。");
+                ModelState.AddModelError("", "Update failed");
                 ViewBag.EditId = customer.CustomerID;
                 var list = _repo.GetAll();
                 return View("~/Views/Home/Index.cshtml", list);
             }
 
-            // 成功：回到初期表示（再次 GetAll）
+            // 初期表示に戻る（再GetAll）
             TempData["Message"] = "Record updated successfully.";
             return RedirectToAction("Index");
         }
@@ -66,7 +66,7 @@ namespace ASP.NET_WebForm_Dapper_VB.NET_C_.Controllers
 
                 if (!_repo.UpdateCustomer(customer))
                 {
-                    ModelState.AddModelError("", "更新失败，请稍后再试。");
+                    ModelState.AddModelError("", "Update failed");
                     ViewBag.EditId = customer.CustomerID;
                     var list = _repo.GetAll();
                     return View("~/Views/Home/Index.cshtml", list);
