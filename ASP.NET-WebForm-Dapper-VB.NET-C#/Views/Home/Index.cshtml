@@ -1,0 +1,177 @@
+﻿@using System.Linq
+@model IEnumerable<ASP.NET_WebForm_Dapper_VB.NET_C_.Models.Customer>
+@{
+    Layout = null;
+    var data = Model ?? Enumerable.Empty<ASP.NET_WebForm_Dapper_VB.NET_C_.Models.Customer>();
+    int? editId = ViewBag.EditId as int?;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Customer List</title>
+    <style>
+        #tblEntryForm {
+            margin-top: 50px;
+            border: 2px solid lightgray;
+            width: 500px;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+            #tblEntryForm td {
+                border: 2px solid lightgray;
+            }
+
+            #tblEntryForm div {
+                text-align: center;
+                font-weight: bold;
+            }
+
+            #tblEntryForm span {
+                margin-left: 0px;
+            }
+
+        #lblMessage {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <form method="post" action="/Customers/Create">
+        @Html.AntiForgeryToken()
+        <table id="tblEntryForm" class="gv">
+            <tr>
+                <td colspan="3">
+                    <div>Customer Information Entry Form</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    CompanyName:
+                </td>
+                <td>
+                    <input type="text" id="txtCompanyName" name="CompanyName" style="width:150px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Address:
+                </td>
+                <td>
+                    <input type="text" id="txtAddress" name="Address" style="width:150px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    City:
+                </td>
+                <td>
+                    <input type="text" id="txtCity" name="City" style="width:150px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    State:
+                </td>
+                <td>
+                    <input type="text" id="txtState" name="State" style="width:150px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Intro Date:
+                </td>
+                <td>
+                    <input type="date" id="txtIntroDate" name="IntroDate" style="width:150px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Credit Limit:
+                </td>
+                <td>
+                    <input type="text" id="txtCreditLimit" name="CreditLimit" style="width:150px;" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" id="btnSubmit" name="btnSubmit" value="Save" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div>
+        <br />
+
+        <table cellspacing="0" cellpadding="4" rules="all" id="gvCustomer" style="background-color:White;border-color:#3366CC;border-width:1px;border-style:None;border-collapse:collapse;">
+            <tbody>
+                <tr style="color:#CCCCFF;background-color:#003399;font-weight:bold;">
+                    <th>Company Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Intro Date</th>
+                    <th>Credit Limit</th>
+                    <th>&nbsp;</th>
+                </tr>
+                @foreach (var c in data)
+                {
+                    var isEditing = (editId == c.CustomerID);
+                    <tr style="color:#003399;background-color:White;">
+                        @if (isEditing)
+                        {
+                            
+                            using (Html.BeginForm("Update", "Customers", FormMethod.Post, new { id = "form-" + c.CustomerID }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="CustomerID" value="@c.CustomerID" />
+                                <td style="width:130px;"><input type="text" name="CompanyName" value="@c.CompanyName" /></td>
+                                <td style="width:100px;"><input type="text" name="Address" value="@c.Address" /></td>
+                                <td style="width:100px;"><input type="text" name="City" value="@c.City" /></td>
+                                <td style="width:100px;"><input type="text" name="State" value="@c.State" /></td>
+
+                                <td style="width:100px;">
+                                    <input type="date" name="IntroDate"
+                                           value="@(c.IntroDate.HasValue ? c.IntroDate.Value.ToString("yyyy-MM-dd") : "")" />
+                                </td>
+
+                                <td style="width:100px;"><input type="text" name="CreditLimit" value="@c.CreditLimit" /></td>
+                                <td><input type="submit" value="保存" />
+                                    <button type="button" onclick="location.href='@Url.Action("Index","Customers")'">取消</button></td>
+                            }
+
+
+                        }
+                        else
+                        {
+                            <td>@c.CompanyName</td>
+                            <td>@c.Address</td>
+                            <td>@c.City</td>
+                            <td>@c.State</td>
+                            <td>@Html.DisplayFor(_ => c.IntroDate)</td>
+                            <td>@c.CreditLimit</td>
+                            <td>
+                                <button type="button" onclick="location.href='@Url.Action("Index","Customers", new { editId = c.CustomerID })'">编辑</button>
+                                @using (Html.BeginForm("Delete", "Customers", FormMethod.Post, new { style = "display:inline;" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@c.CustomerID" />
+                                    <input type="submit" value="删除" onclick="return confirm('确定删除？');" />
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (TempData["Message"] != null)
+        {
+            <div style="color: red; border: 1px; padding: 5px; margin-top: 10px; background-color: White;">
+                @TempData["Message"]
+            </div>
+        }
+    </div>  
+</body>
+</html>
