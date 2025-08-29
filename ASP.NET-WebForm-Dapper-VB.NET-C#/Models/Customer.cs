@@ -16,7 +16,5 @@ namespace ASP.NET_WebForm_Dapper_VB.NET_C_.Models
         public DateTime? IntroDate { get; set; }
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public decimal CreditLimit { get; set; }
-        //public System.DateTime IntroDate { get; set; }
-        //public decimal CreditLimit { get; set; }
     }
 }
